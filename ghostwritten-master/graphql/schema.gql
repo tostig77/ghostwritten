@@ -1,0 +1,90 @@
+input DeleteJobInput {
+  id: ID!
+}
+
+type Mutation {
+  createUser(input: CreateUserInput!): User!
+  loginUser(input: LoginUserInput!): String!
+  logoutUser: Boolean!
+  createReferrer(input: CreateReferrerInput!): Referrer!
+  createJob(input: CreateJobInput!): Job!
+  deleteJob(input: DeleteJobInput!): Boolean!
+  sendEmail(input: SendEmailInput!): Boolean!
+}
+
+type Referrer {
+  id: ID!
+  code: String!
+}
+
+enum JobType {
+  ESSAY
+  APPLICATION
+  TEST
+}
+
+enum Roles {
+  ADMIN
+}
+
+type Query {
+  node(id: ID!): Node
+  readUser(email: String!): User
+  readCurrentUser: User
+  readReferrer(code: String!): Referrer
+  readJobs(email: String!): [Job!]
+}
+
+interface Node {
+  id: ID!
+}
+
+type User implements Node {
+  id: ID!
+  email: String!
+  roles: [Roles!]!
+}
+
+input CreateUserInput {
+  email: String!
+  password: String!
+  roles: [Roles!]
+}
+
+type Job implements Node {
+  id: ID!
+  jobType: JobType!
+  email: String!
+  details: String!
+  price: Int!
+}
+
+input CreateReferrerInput {
+  code: String!
+}
+
+input CreateJobInput {
+  jobType: JobType!
+  email: String!
+  details: String!
+  price: Int!
+}
+
+input LoginUserInput {
+  email: String!
+  password: String!
+}
+
+input SendEmailInput {
+  from: String!
+  to: [String!]!
+  replyTo: String
+  subject: String!
+  text: String!
+  html: String!
+}
+
+schema {
+  query: Query
+  mutation: Mutation
+}
